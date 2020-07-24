@@ -53,4 +53,109 @@ const style = {
 
 ¡Definir una variable llamada `style` en el ámbito de nivel superior sería una idea extremadamente mala en muchos entornos JavaScript! En React, sin embargo, está totalmente bien.
 
-Recuerde que todos los archivos son invisibles para todos los demás, excepto lo que usted elige exponer a través de module.exports. Podría tener 100 archivos diferentes, todos con variables globales llamadas estilo, y no podría haber conflictos.
+Recuerde que todos los archivos son invisibles para todos los demás, excepto lo que usted elige exponer a través de `module.exports`. Podría tener 100 archivos diferentes, todos con variables globales llamadas `style`, y no podría haber conflictos.
+
+---
+
+# Sintaxis de nombres de estilo
+
+En JavaScript normal, los _nombres de estilo_ se escriben en minúsculas con guiones:
+
+```javascript
+const styles = {
+  "margin-top": "20px",
+  "background-color": "green",
+};
+```
+
+En React, esos mismos nombres se escriben en camelCase:
+
+```jsx
+const styles = {
+  marginTop: "20px",
+  backgroundColor: "green",
+};
+```
+
+Esto tiene un efecto cero en los _valores_ de propiedad de estilo, solo en los _nombres_ de propiedad de estilo.
+
+---
+
+# Sintaxis de valor de estilo
+
+En el último ejercicio, aprendió cómo los _nombres_ de estilo son ligeramente diferentes en React que en JavaScript normal.
+
+En este ejercicio, aprenderá cómo los _valores_ de estilo son ligeramente diferentes en React que en JavaScript normal.
+
+En JS regular, los _valores_ de estilo son casi siempre cadenas. Incluso si un valor de estilo es numérico, generalmente debe escribirlo como una cadena para poder especificar una unidad. Por ejemplo, debe escribir `"450px"` o "20%".
+
+En React, si escribe un valor de estilo como un _número_, se asume la unidad `"px"`.
+
+¡Que conveniente! Si desea un tamaño de fuente de 30px, puede escribir:
+
+```jsx
+{
+  fontSize: 30;
+}
+```
+
+Si desea usar unidades que no sean "px", puede usar una cadena:
+
+```jsx
+{
+  fontSize: "2em";
+}
+```
+
+Especificar "px" con una cadena seguirá funcionando, aunque es redundante.
+
+Algunos estilos específicos no completarán automáticamente el "px" por usted. Estos son estilos en los que no es probable que uses "px" de todos modos, por lo que realmente no tienes que preocuparte por eso. [Aquí hay una lista de estilos que no asumen "px"](https://facebook.github.io/react/tips/style-props-value-px.html).
+
+---
+
+# Compartir estilos en múltiples componentes
+
+¿Qué sucede si desea reutilizar estilos para varios componentes diferentes?
+
+Una forma de hacer que los estilos sean _reutilizables_ es mantenerlos en un archivo JavaScript separado. Este archivo debe _exportar_ los estilos que desea reutilizar, a través de `export`. Luego puede `import` sus estilos a cualquier componente que los desee.
+
+En el editor de código, avance y retroceda entre **facebookStyles.js** y **FacebookColorThief.js** para ver un archivo de estilos en acción.
+
+```jsx
+// facebook color palette
+
+const blue = "rgb(139, 157, 195)";
+const darkBlue = "rgb(059, 089, 152)";
+const lightBlue = "rgb(223, 227, 238)";
+const grey = "rgb(247, 247, 247)";
+const white = "rgb(255, 255, 255)";
+
+const colorStyles = {
+  blue: blue,
+  darkBlue: darkBlue,
+  lightBlue: lightBlue,
+  grey: grey,
+  white: white,
+};
+```
+
+```jsx
+// FacebookColorThief.js
+
+import React from "react";
+import ReactDOM from "react-dom";
+import { colorStyles } from "./facebookStyles";
+
+let divStyle = {
+  backgroundColor: styles.darkBlue,
+  color: styles.white,
+};
+
+export class Wow extends React.Component {
+  render() {
+    return <div style={divStyle}>Wow, I stole these colors from Facebook!</div>;
+  }
+}
+
+ReactDOM.render(<Wow />, document.getElementById("app"));
+```
